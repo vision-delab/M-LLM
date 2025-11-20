@@ -42,7 +42,7 @@ def preview_log():
             file.seek(0)
             content = file.read().decode("utf-8", errors="ignore")
             # text_area_style()
-            st.text_area(f"{file.name}", content, height=400, disabled=False, label_visibility="collapsed", key=f"File_{i}")
+            st.text_area(f"{file.name}", content, height=400, disabled=False, label_visibility="collapsed", key=f"{file.name}")
 
 
 def preview_time():
