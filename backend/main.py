@@ -43,7 +43,7 @@ async def predict_log(data: str = Form(None)):
     title = parsed.get("title", "")
     log_type = parsed.get("log_type", "")
     
-    pre_trained = ["BGL", "Thunderbird", "HDFS_v1"]
+    pre_trained = ["BGL", "Thunderbird", "HDFS"]
     
     if text or log_type not in pre_trained:
         bash_script = "log/log_unpretrained.sh"
