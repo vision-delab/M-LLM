@@ -1,7 +1,7 @@
 import streamlit as st
 from pathlib import Path
 from PIL import Image
-from .time_result_content import time_method1, time_method2, time_method3
+from .time_result_content import time_method, time_method3
 from .log_result_content import log_pre, log_unpre
 
 def image_result(result: dict):
@@ -49,12 +49,12 @@ def time_result(result: dict):
     
     method = result.get("method", [])
     
-    if method[0] == 'Method1':
-        time_method1(result)
-    elif method[0] == 'Method2':
-        time_method2(result)
-    elif method[0] == 'Method3':
+    st.markdown(f"<h3 style='text-align: center;'>Time Method: {st.session_state.time_method_labels[method[0]]}</h3>", unsafe_allow_html=True)
+
+    if method[0] == 'Method3':
         time_method3(result)
+    else:
+        time_method(result)
     
     
 def video_result(result: dict):

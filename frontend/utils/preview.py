@@ -60,7 +60,7 @@ def preview_time():
     uploaded_files = st.session_state.uploaded_file
 
     if uploaded_files:
-        st.markdown("### Files")
+        st.markdown("### Files & Visualize")
         for file in uploaded_files:
             st.markdown("---")
             col1, col2 = st.columns([3, 1])  # col1: 파일 이름, col2: 버튼
@@ -73,9 +73,7 @@ def preview_time():
                     file_name=file.name,
                     mime=file.type
                 )
-        
-        st.markdown("### Visualize")
-        for file in uploaded_files:
+
             try:
                 values = make_list(file)
                 image = make_ts_image(len(values), values)

@@ -7,7 +7,7 @@ from .util import text_area_style
 
 HISTORY_DIR = Path(__file__).parent.parent.parent / "history" / "Time"
 
-def time_method1(result: dict):
+def time_method(result: dict):
     row_names = result.get("row_name", [])
     method = result.get("method", [])
     input_paths = result.get("input_paths", [])
@@ -63,8 +63,6 @@ def time_method1(result: dict):
                 end = a.get("end")
                 st.write(f"{idx+1}. Start: {start}, End: {end}")
 
-def time_method2(result: dict):
-    pass
 
 def time_method3(result: dict):
     pass
