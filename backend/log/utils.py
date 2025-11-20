@@ -5,7 +5,7 @@ import torch
 ################################
 # un-pretrained model: Qwen
 ################################
-def read_log_file(path, chunk_size=50):
+def read_log_file(path, chunk_size=15):
     if not os.path.exists(path):
         raise FileNotFoundError(f"File does not exist: {path}")
 
