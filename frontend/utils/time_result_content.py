@@ -3,7 +3,7 @@ from PIL import Image
 import json
 from pathlib import Path
 import os
-from .util import text_area_style
+from .util import text_area_style, make_download_sort
 
 HISTORY_DIR = Path(__file__).parent.parent.parent / "history" / "Time"
 
@@ -21,25 +21,13 @@ def time_method(result: dict):
     for i in range(len(input_paths)):
         st.markdown("---")
         
-        col1, col2 = st.columns([5, 1])  # col1: 파일 이름, col2: 버튼
-        with col1:
-            st.write(f"📄 {row_names[i]}")
-        with col2:
-            file_path = low_input_paths / "input" / row_names[i]
-            with open(file_path, "rb") as f:
-                st.download_button(
-                    label="Download",
-                    data=f.read(),
-                    file_name=os.path.basename(file_path),
-                    mime="application/octet-stream"
-                )
-        
         subheader_name = row_names[i] if i < len(row_names) else f"Sample {i+1}"
-        st.subheader(subheader_name)
-
-        # 입력 이미지 표시
-        img = Image.open(input_paths[i])
-        st.image(img, caption=f"Input: {row_names[i]}")
+        st.subheader(f"Input File name: {subheader_name}")
+        
+        file_path = low_input_paths / "input" / row_names[i]
+        make_download_sort(file_path, row_names[i])
+        make_download_sort(input_paths[i], Path(input_paths[i]).name)
+        make_download_sort(result_paths[i], Path(result_paths[i]).name)
 
         # 입력 텍스트 표시
         if texts[i]:
@@ -49,6 +37,9 @@ def time_method(result: dict):
         else:
             st.markdown(f"<h3 style='text-align: left;'>No Input Text</h3>", unsafe_allow_html=True)
 
+        # 입력 이미지 표시
+        img = Image.open(input_paths[i])
+        st.image(img, caption=f"Input: {row_names[i]}")
 
         # 결과 이미지 표시
         res_img = Image.open(result_paths[i])

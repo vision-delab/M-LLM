@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from io import BytesIO
 import streamlit as st
 import streamlit.components.v1 as components
+import os
 
 # ================================
 # Text area
@@ -40,6 +41,48 @@ def text_area_style(text):
 # ================================
 # Time 
 # ================================
+def make_download_sort(file_path, name):
+    col1, col2 = st.columns([5, 1])  # col1: 파일 이름, col2: 버튼
+    with col1:
+        st.markdown(
+            f"<div style='display: flex; align-items: center; height: 40px;'>📄 {name}</div>",
+            unsafe_allow_html=True
+        )
+            
+    with col2:
+        with open(file_path, "rb") as f:
+            st.download_button(
+                label="Download",
+                data=f.read(),
+                file_name=os.path.basename(file_path),
+                mime="application/octet-stream"
+            )
+            
+            
+def make_download_preview(file):
+    col1, col2 = st.columns([5, 1])  # col1: 파일 이름, col2: 버튼       
+    with col1:
+        st.markdown(
+            f"<div style='display: flex; align-items: center; height: 40px;'>📄 {file.name}</div>",
+            unsafe_allow_html=True
+        )
+    with col2:
+        st.download_button(
+            label="Download",
+            data=file.getvalue(),
+            file_name=file.name,
+            mime=file.type
+        )
+        
+# def center_image(file_path, caption):
+#     st.markdown(f"""
+#     <figure style="text-align: center;">
+#         <img src="{str(file_path)}" width="300">
+#         <figcaption>{caption}</figcaption>
+#     </figure>
+#     """, unsafe_allow_html=True)
+
+
 def make_list(uploaded_file):
     uploaded_file.seek(0)
     ext = Path(uploaded_file.name).suffix.lower()

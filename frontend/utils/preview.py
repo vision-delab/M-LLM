@@ -28,16 +28,7 @@ def preview_log():
         st.markdown("### Files")
         for file in uploaded_files:
             st.markdown("---")
-            col1, col2 = st.columns([3, 1])  # col1: 파일 이름, col2: 버튼
-            with col1:
-                st.write(f"📄 {file.name}")
-            with col2:
-                st.download_button(
-                    label="Download",
-                    data=file.getvalue(),
-                    file_name=file.name,
-                    mime=file.type
-                )
+            make_download_preview(file)
         
             file.seek(0)
             content = file.read().decode("utf-8", errors="ignore")
@@ -63,16 +54,7 @@ def preview_time():
         st.markdown("### Files & Visualize")
         for file in uploaded_files:
             st.markdown("---")
-            col1, col2 = st.columns([3, 1])  # col1: 파일 이름, col2: 버튼
-            with col1:
-                st.write(f"📄 {file.name}")
-            with col2:
-                st.download_button(
-                    label="Download",
-                    data=file.getvalue(),
-                    file_name=file.name,
-                    mime=file.type
-                )
+            make_download_preview(file)
 
             try:
                 values = make_list(file)
