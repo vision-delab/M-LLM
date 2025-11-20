@@ -47,7 +47,9 @@ def main():
         top_k=2,  # FFT Top-k Periods
         group_length=4,  # Grouping size
         interval=20,  # Period 간 최소 간격
-        grouping=True  # Grouping 사용 여부
+        grouping=True,  # Grouping 사용 여부
+        method=args.method,
+        text=args.text
     )
     
     for s in samples_path:
