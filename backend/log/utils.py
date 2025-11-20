@@ -8,6 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from openpyxl.drawing.image import Image
 from tqdm import tqdm
+import csv
 
 
 ANSI_ESCAPE_PATTERN = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
@@ -114,9 +115,9 @@ Now produce the classifications including a brief explanation for abnormal lines
     return messages
 
 
-def generate_user_defined_result(model, tokenizer, dataset_path, user_defined_prompt):
+def generate_user_defined_result(model, tokenizer, dataset_path, user_defined_prompt, chunk_size=15):
     all_responses = []
-    log_batches = read_log_file(dataset_path)
+    log_batches = read_log_file(dataset_path, chunk_size)
 
     for i, log_batch in enumerate(log_batches):
         messages = build_user_defined_messages(log_batch, user_defined_prompt)
@@ -145,9 +146,9 @@ def generate_user_defined_result(model, tokenizer, dataset_path, user_defined_pr
     return all_responses
 
 
-def generate_log_only_result(model, tokenizer, dataset_path):
+def generate_log_only_result(model, tokenizer, dataset_path, chunk_size=15):
     all_responses = []
-    log_batches = read_log_file(dataset_path)
+    log_batches = read_log_file(dataset_path, chunk_size=15)
 
     for i, log_batch in enumerate(log_batches):
         messages = build_log_only_messages(log_batch)
@@ -174,6 +175,24 @@ def generate_log_only_result(model, tokenizer, dataset_path):
         all_responses.append(response)
 
     return all_responses
+
+
+def make_final_file(input_path, preditions, output_path, chunk_size):
+    with open(input_path, 'r', encoding='utf-8', errors='ignore') as f:
+        input_list = f.read()
+    input_list = input_list.split('\n')
+    
+    merged = []
+    for chunk in preditions:  
+        lines = chunk.split("\n")
+        if len(lines) < chunk_size:
+            lines.extend([""] * (chunk_size - len(lines)))
+        merged.extend(lines)
+
+    cleaned = [re.sub(r"^\s*\d+\.\s*", "", line) for line in merged]
+    
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump([{"input": i, "cleaned": c} for i, c in zip(input_list, cleaned)], f, ensure_ascii=False, indent=2)
 
 
 ################################
@@ -364,7 +383,7 @@ def session_window_data(input_path, result_path):
     log_format = '<Date> <Time> <Pid> <Level> <Component>: <Content>' 
     structure_log(input_path, result_path, log_name, log_format, start_line = 0, end_line = None)
     
-    log_structured_file = pd.read_csv(result_path /f'{log_name}_structured.csv')
+    log_structured_file = result_path /f'{log_name}_structured.csv'
     
     df = pd.read_csv(log_structured_file, engine='c', na_filter=False, memory_map=True, dtype={'Date':object, "Time": object})
     
