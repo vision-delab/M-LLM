@@ -192,7 +192,7 @@ def make_final_file(input_path, preditions, output_path, chunk_size):
     cleaned = [re.sub(r"^\s*\d+\.\s*", "", line) for line in merged]
     
     with open(output_path, "w", encoding="utf-8") as f:
-        json.dump([{"input": i, "cleaned": c} for i, c in zip(input_list, cleaned)], f, ensure_ascii=False, indent=2)
+        json.dump([{"input": i, "predicted": c} for i, c in zip(input_list, cleaned)], f, ensure_ascii=False, indent=2)
 
 
 ################################
